@@ -5,7 +5,7 @@ class Fatigue {
     static ID = 'pf2e-fatigue';
 
     static FLAGS = {
-        EXPIRE_TIME: 'expireTime',
+        START_TIME: 'startTime',
         IS_FATIGUED: 'isFatigued'
     }
 
@@ -69,11 +69,11 @@ class Fatigue {
 
 class FatigueData {
     static setTracker(character, startTime) {
-        return character.setFlag(Fatigue.ID, Fatigue.FLAGS.EXPIRE_TIME, startTime);
+        return character.setFlag(Fatigue.ID, Fatigue.FLAGS.START_TIME, startTime);
     }
 
     static getTracker(character) {
-        return character.getFlag(Fatigue.ID, Fatigue.FLAGS.EXPIRE_TIME);
+        return character.getFlag(Fatigue.ID, Fatigue.FLAGS.START_TIME);
     }
 
     static setFatigued(character, isFatigued) {
