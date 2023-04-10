@@ -1,3 +1,10 @@
 {
-    "MODULE.hello": "hello"
-}
+    "PF2E-FATIGUE": {
+      "settings": {
+        "fatigue-duration": {
+          "Name": "Length of time characters spend rested",
+          "Hint": "Number of in game hours to wait after resting before applying condition."
+        }
+      }
+    }
+  }
