@@ -54,8 +54,8 @@ class Fatigue {
     }
 
     static startTimer(character) {
-        this.log(false, character.name + ' rested for the night at ' + worldTime);
         const worldTime = game.time._time.worldTime;
+        this.log(false, character.name + ' rested for the night at ' + worldTime);
         FatigueData.setTracker(character, worldTime);
         FatigueData.setFatigued(character, false);
     }
