@@ -1,7 +1,7 @@
 # pf2e-fatigue
 A small Foundry VTT module to apply the fatigued condition to characters automatically.
 
-#How it works:
+## How it works:
 
 Just hit rest to start the timer:
 
