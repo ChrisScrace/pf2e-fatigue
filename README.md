@@ -15,8 +15,12 @@ Hey presto, you're fatigued:
 
 <img width="92" alt="Fatigued" src="https://user-images.githubusercontent.com/29238929/231084642-078d09a4-8c0e-48d1-8994-61235b21d0b4.PNG">
 
-Length of time before player becomes fatigued can be set in the module settings:
+## Wait, there's more!
 
-<img width="406" alt="options" src="https://user-images.githubusercontent.com/29238929/231084689-178d1aa1-6b88-4d39-aaf6-a6926d68929e.PNG">
+If the character has the feat Forge Day's Rest they will be asked when resting if the rest was for 12 or more hours and this will be taken into account when applying fatigued
 
-Timer starts on rest so your players should hit rest once the clock has been advanced and their rest is completed.
+## Settings:
+
+![image](https://user-images.githubusercontent.com/29238929/231682563-5f05ce6f-1852-4cd9-b09b-8da6aeac610c.png)
+
+N.B. Timer starts on rest so your players should hit rest once the clock has been advanced and their rest is completed.
