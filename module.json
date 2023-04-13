@@ -30,6 +30,9 @@
   "scripts": [
     "scripts/fatigue.js"
   ],
+  "styles": [
+    "styles/fatigue.css"
+  ],
   "languages": [
     {
       "lang": "en",

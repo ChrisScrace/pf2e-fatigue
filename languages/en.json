@@ -4,6 +4,10 @@
       "fatigue-duration": {
         "Name": "Length of time characters spend rested",
         "Hint": "Number of in game hours to wait after resting before applying condition."
+      },
+      "forge-days-rest-duration": {
+        "Name": "Length of time to add on for Forge Day's Rest feat",
+        "Hint": "Number of in game hours to add on for succesful forge day's rest."
       }
     }
   }

@@ -1,0 +1,20 @@
+.fatigue-button {
+    background: transparent;
+    color: black;
+    line-height: normal;
+    border: 1;
+    align-self: center;
+    padding: 15px 32px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.fatigue-button:hover,
+.fatigue-button:focus {
+    box-shadow: none;
+    text-shadow: 0 0 5px red;
+}
+
+.fatigue-window {
+    text-align: center;
+}
