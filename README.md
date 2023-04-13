@@ -17,7 +17,7 @@ Hey presto, you're fatigued:
 
 ## Wait, there's more!
 
-If the character has the feat Forge Day's Rest they will be asked when resting if the rest was for 12 or more hours and this will be taken into account when applying fatigued
+* If the character has the feat Forge Day's Rest they will be asked when resting if the rest was for 12 or more hours and this will be taken into account when applying fatigued
 
 ## Settings:
 
