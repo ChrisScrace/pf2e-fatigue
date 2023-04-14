@@ -6,8 +6,11 @@
         "Hint": "Number of in game hours to wait after resting before applying condition."
       },
       "forge-days-rest-duration": {
-        "Name": "Length of time to add on for Forge Day's Rest feat",
+        "Name": "Forge Day's Rest feat duration",
         "Hint": "Number of in game hours to add on for succesful forge day's rest."
+      },
+      "rest-in-armor-fatigue": {
+        "Name": "Resting while wearing armor applies fatigue?"
       }
     }
   }

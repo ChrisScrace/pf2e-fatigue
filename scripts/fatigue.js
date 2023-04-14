@@ -13,7 +13,8 @@ class Fatigue {
 
     static SETTINGS = {
         FATIGUE_DURATION: 'fatigue-duration',
-        FORGE_DAYS_REST_DURATION: 'forge-days-rest-duration'
+        FORGE_DAYS_REST_DURATION: 'forge-days-rest-duration',
+        REST_IN_ARMOR_FATIGUE: 'rest-in-armor-fatigue'
     }
 
     static TEMPLATES = {
@@ -35,7 +36,7 @@ class Fatigue {
             type: Number,
             scope: 'world',
             config: true,
-            hint: `PF2E-FATIGUE.settings.${this.SETTINGS.FATIGUE_DURATION}.Hint`,
+            hint: `PF2E-FATIGUE.settings.${this.SETTINGS.FATIGUE_DURATION}.Hint`
         });
 
         game.settings.register(this.ID, this.SETTINGS.FORGE_DAYS_REST_DURATION, {
@@ -44,14 +45,22 @@ class Fatigue {
             type: Number,
             scope: 'world',
             config: true,
-            hint: `PF2E-FATIGUE.settings.${this.SETTINGS.FORGE_DAYS_REST_DURATION}.Hint`,
+            hint: `PF2E-FATIGUE.settings.${this.SETTINGS.FORGE_DAYS_REST_DURATION}.Hint`
+        });
+
+        game.settings.register(this.ID, this.SETTINGS.REST_IN_ARMOR_FATIGUE, {
+            name: `PF2E-FATIGUE.settings.${this.SETTINGS.REST_IN_ARMOR_FATIGUE}.Name`,
+            default: true,
+            type: Boolean,
+            scope: 'world',
+            config: true
         });
     }
 
     static ensureAllTimersSet() {
         //set timer for any characters that don't already have one
         game.actors.filter((actor) => actor.type === "character").forEach((character) => {
-            if (FatigueData.getTracker(character) == null) {
+            if (FatigueData.getStartTime(character) == null) {
                 this.startTimer(character);
             }
         });
@@ -64,15 +73,15 @@ class Fatigue {
 
             let adjustedWaitTimeInHours = waitTimeInHours;
             //add more time when Forge Day's Rest applies
-            if (true === FatigueData.getForgeDaysRested(character)) {
+            if (true === FatigueData.getHasForgeDaysRested(character)) {
                 this.log(false, character.name + " has FDR");
                 adjustedWaitTimeInHours += game.settings.get(Fatigue.ID, Fatigue.SETTINGS.FORGE_DAYS_REST_DURATION);
             }
             const waitTimeInSeconds = adjustedWaitTimeInHours * SECONDS_IN_HOUR;
 
-            if (worldTime >= FatigueData.getTracker(character) + (waitTimeInSeconds)
-                && true != FatigueData.getFatigued(character)) {
-                FatigueData.setFatigued(character, true);
+            if (worldTime >= FatigueData.getStartTime(character) + (waitTimeInSeconds)
+                && true != FatigueData.getIsFatigued(character)) {
+                FatigueData.setIsFatigued(character, true);
                 this.log(false, character.name + " has gained fatigued!");
                 this.addEffect(character);
             }
@@ -82,12 +91,37 @@ class Fatigue {
     static startTimer(character) {
         const worldTime = game.time._time.worldTime;
         this.log(false, character.name + ' rested for the night at ' + worldTime);
-        FatigueData.setTracker(character, worldTime);
-        FatigueData.setFatigued(character, false);
+        FatigueData.setStartTime(character, worldTime);
+        FatigueData.setIsFatigued(character, false);
         if (this.hasItem(character, FORGE_DAYS_REST_FEAT_ID)) {
             this.log(false, character.name + " has Forge Day's Rest!");
             new ForgeDaysRestForm(character).render(true);
         };
+    }
+
+    static async restForTheNight(character) {
+        this.startTimer(character);
+        //if wearing armor then give fatigued effect
+        if (character.wornArmor != null && game.settings.get(Fatigue.ID, Fatigue.SETTINGS.REST_IN_ARMOR_FATIGUE)) {
+            await Fatigue.createChatEmote(character, character.name + " slept in their armor!");
+            this.addEffect(character);
+        }
+    }
+
+    static async createChatEmote(actor, text) {
+        const content = await renderTemplate("./systems/pf2e/templates/chat/action/content.hbs", { imgPath: actor.img, message: text });
+        const flavor = await renderTemplate("./systems/pf2e/templates/chat/action/flavor.hbs", { action: { title: "", typeNumber: String("") } });
+        await ChatMessage.create({
+            type: CONST.CHAT_MESSAGE_TYPES.EMOTE,
+            speaker: ChatMessage.getSpeaker({ character: actor }),
+            flavor,
+            content,
+            flags: {
+                "pf2e-fatigue": {
+                    actorId: actor.id
+                }
+            }
+        });
     }
 
     static hasItem(character, itemID) {
@@ -105,27 +139,27 @@ class Fatigue {
 }
 
 class FatigueData {
-    static setTracker(character, startTime) {
+    static setStartTime(character, startTime) {
         return character.setFlag(Fatigue.ID, Fatigue.FLAGS.START_TIME, startTime);
     }
 
-    static getTracker(character) {
+    static getStartTime(character) {
         return character.getFlag(Fatigue.ID, Fatigue.FLAGS.START_TIME);
     }
 
-    static setFatigued(character, isFatigued) {
+    static setIsFatigued(character, isFatigued) {
         return character.setFlag(Fatigue.ID, Fatigue.FLAGS.IS_FATIGUED, isFatigued);
     }
 
-    static getFatigued(character) {
+    static getIsFatigued(character) {
         return character.getFlag(Fatigue.ID, Fatigue.FLAGS.IS_FATIGUED);
     }
 
-    static setForgeDaysRested(character, hasForgeDaysRested) {
+    static setHasForgeDaysRested(character, hasForgeDaysRested) {
         return character.setFlag(Fatigue.ID, Fatigue.FLAGS.HAS_RESTED_TWELVE_HOURS, hasForgeDaysRested);
     }
 
-    static getForgeDaysRested(character) {
+    static getHasForgeDaysRested(character) {
         return character.getFlag(Fatigue.ID, Fatigue.FLAGS.HAS_RESTED_TWELVE_HOURS);
     }
 }
@@ -134,59 +168,59 @@ class ForgeDaysRestForm extends FormApplication {
     constructor(character) {
         super();
         this.character = character;
-      }
+    }
 
     static get defaultOptions() {
         const defaults = super.defaultOptions;
-      
-        const overrides = {
-          height: 'auto',
-          width: 'auto',
-          id: 'rested-for-twelve',
-          template: Fatigue.TEMPLATES.FATIGUE,
-          title: 'Forge Day\'s Rest',
-          submitOnChange: true,
-          closeOnSubmit: true
-        };
-      
-        const mergedOptions = foundry.utils.mergeObject(defaults, overrides);
-        
-        return mergedOptions;
-      }
 
-      activateListeners(html) {
+        const overrides = {
+            height: 'auto',
+            width: 'auto',
+            id: 'rested-for-twelve',
+            template: Fatigue.TEMPLATES.FATIGUE,
+            title: 'Forge Day\'s Rest',
+            submitOnChange: true,
+            closeOnSubmit: true
+        };
+
+        const mergedOptions = foundry.utils.mergeObject(defaults, overrides);
+
+        return mergedOptions;
+    }
+
+    activateListeners(html) {
         super.activateListeners(html);
         html.on('click', "[data-action]", this._handleButtonClick.bind(this));
-      }
+    }
 
-      async _handleButtonClick(event) {
+    async _handleButtonClick(event) {
         const clickedElement = $(event.currentTarget);
         const action = clickedElement.data().action;
-    
+
         switch (action) {
-          case 'yes': {
-            Fatigue.log(false, this.character.name + " slept for 12 hours");
-            FatigueData.setForgeDaysRested(this.character, true);
-            break;
-          }
-    
-          case 'no': {
-            Fatigue.log(false, this.character.name +" did not sleep for 12 hours");
-            FatigueData.setForgeDaysRested(this.character, false);
-            break;
-          }
-    
-          default:
-            ToDoList.log(false, 'Invalid action detected', action);
+            case 'yes': {
+                Fatigue.log(false, this.character.name + " slept for 12 hours");
+                FatigueData.setHasForgeDaysRested(this.character, true);
+                break;
+            }
+
+            case 'no': {
+                Fatigue.log(false, this.character.name + " did not sleep for 12 hours");
+                FatigueData.setHasForgeDaysRested(this.character, false);
+                break;
+            }
+
+            default:
+                ToDoList.log(false, 'Invalid action detected', action);
         }
         this.close();
-      }
+    }
 
-      getData(options) {
+    getData(options) {
         return {
-          character: options.character
+            character: options.character
         }
-      }
+    }
 }
 
 Hooks.once('devModeReady', ({ registerPackageDebugFlag }) => { registerPackageDebugFlag(Fatigue.ID); });
@@ -201,6 +235,6 @@ Hooks.on("createActor", (actor) => {
     }
 })
 
-Hooks.on("pf2e.restForTheNight", (character) => Fatigue.startTimer(character));
+Hooks.on("pf2e.restForTheNight", (character) => Fatigue.restForTheNight(character));
 
 Hooks.on("updateWorldTime", (worldTime) => Fatigue.checkTimer(worldTime));
