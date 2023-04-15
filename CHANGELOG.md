@@ -1,3 +1,6 @@
+# 1.3.1
+* Fatigued will not be applied when resting in armor with the comfort trait
+
 # 1.3.0
 * When a character rests whilst wearing armor fatigue is applied (can be toggled off in settings)
 
