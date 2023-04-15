@@ -102,7 +102,9 @@ class Fatigue {
     static async restForTheNight(character) {
         this.startTimer(character);
         //if wearing armor then give fatigued effect
-        if (character.wornArmor != null && game.settings.get(Fatigue.ID, Fatigue.SETTINGS.REST_IN_ARMOR_FATIGUE)) {
+        if (game.settings.get(Fatigue.ID, Fatigue.SETTINGS.REST_IN_ARMOR_FATIGUE)
+            && character.wornArmor != null
+            && !character.wornArmor.traits.has('comfort')) {
             await Fatigue.createChatEmote(character, character.name + " slept in their armor!");
             this.addEffect(character);
         }
