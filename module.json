@@ -37,7 +37,14 @@
     {
       "lang": "en",
       "name": "English",
-      "path": "languages/en.json"
+      "path": "languages/en.json",
+      "flags": {}
+    },
+    {
+      "lang": "cn",
+      "name": "中文（简体）",
+      "path": "languages/cn.json",
+      "flags": {}
     }
   ],
   "url": "#{URL}#",
