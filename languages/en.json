@@ -12,6 +12,10 @@
       "rest-in-armor-fatigue": {
         "Name": "Resting while wearing armor applies fatigue?"
       }
-    }
+    },
+    "rest-for-twelve-question": "Did you rest for 12 hours or more?",
+    "yes": "Yes",
+    "no": "No",
+    "rested-in-armor": " slept in their armor!"
   }
 }

@@ -105,7 +105,7 @@ class Fatigue {
         if (game.settings.get(Fatigue.ID, Fatigue.SETTINGS.REST_IN_ARMOR_FATIGUE)
             && character.wornArmor != null
             && !character.wornArmor.traits.has('comfort')) {
-            await Fatigue.createChatEmote(character, character.name + " slept in their armor!");
+            await Fatigue.createChatEmote(character, character.name + game.i18n.localize("PF2E-FATIGUE.rested-in-armor"));
             this.addEffect(character);
         }
     }
