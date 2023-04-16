@@ -1,3 +1,6 @@
+# 1.3.2
+* text for chat message and forge day's rest pop up added to localization
+
 # 1.3.1
 * Fatigued will not be applied when resting in armor with the comfort trait
 
