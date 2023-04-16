@@ -1,3 +1,7 @@
+# 1.3.3
+* If character rests in any armor and has armored rest feat fatigued will not be applied
+* If character rests in armor and has the steel skin feat fatigued will not be applied when the armor is medium or if its heavy and the character is at least master proficiency
+
 # 1.3.2
 * text for chat message and forge day's rest pop up added to localization
 

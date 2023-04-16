@@ -1,5 +1,7 @@
 const FATIGUED_EFFECT_ID = 'Compendium.pf2e.conditionitems.HL2l2VRSaQHu9lUw';
 const FORGE_DAYS_REST_FEAT_ID = 'Compendium.pf2e.feats-srd.ZxiAMposVPDNPwxI';
+const STEEL_SKIN_FEAT_ID = 'Compendium.pf2e.feats-srd.uxwHHjWs3ehqtG4b';
+const ARMORED_REST_FEAT_ID = 'Compendium.pf2e.feats-srd.OmjTt8eR1Q3SmkPp';
 const SECONDS_IN_HOUR = 3600;
 
 class Fatigue {
@@ -102,11 +104,36 @@ class Fatigue {
     static async restForTheNight(character) {
         this.startTimer(character);
         //if wearing armor then give fatigued effect
-        if (game.settings.get(Fatigue.ID, Fatigue.SETTINGS.REST_IN_ARMOR_FATIGUE)
-            && character.wornArmor != null
-            && !character.wornArmor.traits.has('comfort')) {
+        if (sleepingInArmorIsOn()
+            && isWearingArmor()
+            && armorIsNotComfortable()
+            && doesNotHaveArmoredRestFeat()
+            && doesNotBenefitFromSteelSkin()) {
             await Fatigue.createChatEmote(character, character.name + game.i18n.localize("PF2E-FATIGUE.rested-in-armor"));
             this.addEffect(character);
+        }
+
+        function doesNotBenefitFromSteelSkin() {
+            const category = character.wornArmor.category;
+            return Fatigue.hasItem(character, STEEL_SKIN_FEAT_ID)
+                ? !(category === 'medium' || (category === 'heavy' && character.system.martial.heavy.rank >= 3))
+                : true;
+        }
+
+        function doesNotHaveArmoredRestFeat() {
+            return !Fatigue.hasItem(character, ARMORED_REST_FEAT_ID);
+        }
+
+        function armorIsNotComfortable() {
+            return !character.wornArmor.traits.has('comfort');
+        }
+
+        function sleepingInArmorIsOn() {
+            return game.settings.get(Fatigue.ID, Fatigue.SETTINGS.REST_IN_ARMOR_FATIGUE);
+        }
+
+        function isWearingArmor() {
+            return character.wornArmor != null;
         }
     }
 
