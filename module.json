@@ -1,7 +1,7 @@
 {
   "id": "pf2e-fatigue",
   "title": "PF2E Fatigue",
-  "description": "Simple module to apply fatigue when having not rested",
+  "description": "Simple module to automate the application of fatigued relating to resting",
   "version": "#{VERSION}#",
   "library": "false",
   "manifestPlusVersion": "1.2.0",
