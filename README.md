@@ -24,4 +24,6 @@ Hey presto, you're fatigued:
 
 ![image](https://user-images.githubusercontent.com/29238929/232143517-c1e5bdda-a1a0-400b-9dde-cfd5eb696af2.png)
 
-N.B. Timer starts on rest so your players should hit rest once the clock has been advanced and their rest is completed.
+N.B. 
+* Timer starts on rest so your players should hit rest once the clock has been advanced and their rest is completed.
+* GM must be online in order for Fatigued condition to be applied after timer expires

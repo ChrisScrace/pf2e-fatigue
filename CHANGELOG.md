@@ -1,3 +1,7 @@
+# 1.3.4
+* Fixed bug where fatigue was being applied multiple times when players were online
+* GM must now be online for the fatigued condition to be applied after timer expires
+
 # 1.3.3
 * If character rests in any armor and has armored rest feat fatigued will not be applied
 * If character rests in armor and has the steel skin feat fatigued will not be applied when the armor is medium or if its heavy and the character is at least master proficiency
