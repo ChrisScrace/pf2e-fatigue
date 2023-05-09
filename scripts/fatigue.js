@@ -69,25 +69,27 @@ class Fatigue {
     }
 
     static checkTimer(worldTime) {
-        const waitTimeInHours = game.settings.get(Fatigue.ID, Fatigue.SETTINGS.FATIGUE_DURATION);
+        if (game.user.role == 4) {
+            const waitTimeInHours = game.settings.get(Fatigue.ID, Fatigue.SETTINGS.FATIGUE_DURATION);
 
-        game.actors.filter((actor) => actor.type === "character").forEach(character => {
+            game.actors.filter((actor) => actor.type === "character").forEach(character => {
 
-            let adjustedWaitTimeInHours = waitTimeInHours;
-            //add more time when Forge Day's Rest applies
-            if (true === FatigueData.getHasForgeDaysRested(character)) {
-                this.log(false, character.name + " has FDR");
-                adjustedWaitTimeInHours += game.settings.get(Fatigue.ID, Fatigue.SETTINGS.FORGE_DAYS_REST_DURATION);
-            }
-            const waitTimeInSeconds = adjustedWaitTimeInHours * SECONDS_IN_HOUR;
+                let adjustedWaitTimeInHours = waitTimeInHours;
+                //add more time when Forge Day's Rest applies
+                if (true === FatigueData.getHasForgeDaysRested(character)) {
+                    this.log(false, character.name + " has FDR");
+                    adjustedWaitTimeInHours += game.settings.get(Fatigue.ID, Fatigue.SETTINGS.FORGE_DAYS_REST_DURATION);
+                }
+                const waitTimeInSeconds = adjustedWaitTimeInHours * SECONDS_IN_HOUR;
 
-            if (worldTime >= FatigueData.getStartTime(character) + (waitTimeInSeconds)
-                && true != FatigueData.getIsFatigued(character)) {
-                FatigueData.setIsFatigued(character, true);
-                this.log(false, character.name + " has gained fatigued!");
-                this.addEffect(character);
-            }
-        });
+                if (worldTime >= FatigueData.getStartTime(character) + (waitTimeInSeconds)
+                    && true != FatigueData.getIsFatigued(character)) {
+                    FatigueData.setIsFatigued(character, true);
+                    this.log(false, character.name + " has gained fatigued!");
+                    this.addEffect(character);
+                }
+            });
+        }
     }
 
     static startTimer(character) {
@@ -161,9 +163,12 @@ class Fatigue {
         return actor.items.find(item => item.getFlag("core", "sourceId") === sourceId);
     }
     static async addEffect(character) {
-        const effect = (await fromUuid(FATIGUED_EFFECT_ID)).toObject();
-        effect.flags.core.sourceId = FATIGUED_EFFECT_ID;
-        await character.createEmbeddedDocuments('Item', [effect]);
+        if (!Fatigue.hasItem(character, FATIGUED_EFFECT_ID)) {
+            this.log(false, character.name + " creating effect");
+            const effect = (await fromUuid(FATIGUED_EFFECT_ID)).toObject();
+            effect.flags.core.sourceId = FATIGUED_EFFECT_ID;
+            await character.createEmbeddedDocuments('Item', [effect]);
+        }
     }
 }
 
