@@ -56,11 +56,11 @@
       "label": "pf2e-fatigue",
       "path": "packs/pf2e-fatigue",
       "type": "Macro",
+      "system": "pf2e",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
-      },
-      "system": "pf2e"
+      }
     }
   ]
 }
