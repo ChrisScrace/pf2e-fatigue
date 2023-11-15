@@ -3,11 +3,9 @@
   "title": "PF2E Fatigue",
   "description": "Simple module to automate the application of fatigued relating to resting",
   "version": "#{VERSION}#",
-  "library": "false",
-  "manifestPlusVersion": "1.2.0",
   "compatibility": {
-    "minimum": 10,
-    "verified": 11
+    "minimum": "10",
+    "verified": "11"
   },
   "authors": [
     {
@@ -51,5 +49,18 @@
   "manifest": "#{MANIFEST}#",
   "download": "#{DOWNLOAD}#",
   "license": "LICENSE",
-  "readme": "README.md"
+  "readme": "README.md",
+  "packs": [
+    {
+      "name": "pf2e-fatigue",
+      "label": "pf2e-fatigue",
+      "path": "packs/pf2e-fatigue",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "system": "pf2e"
+    }
+  ]
 }
