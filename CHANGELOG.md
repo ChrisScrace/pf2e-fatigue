@@ -1,3 +1,6 @@
+# 1.3.5
+* Updated compatibility info
+  
 # 1.3.4
 * Fixed bug where fatigue was being applied multiple times when players were online
 * GM must now be online for the fatigued condition to be applied after timer expires
