@@ -1,4 +1,4 @@
-# 1.3.5
+# 1.3.6
 * Added a macro to display the remaining time of the selected character token
 
 # 1.3.5
