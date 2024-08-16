@@ -160,7 +160,7 @@ class Fatigue {
     }
 
     static getItemFromActor(actor, sourceId) {
-        return actor.items.find(item => item.getFlag("core", "sourceId") === sourceId);
+        return actor.items.find(item => item.getFlag("core", "_stats.compendiumSource") === sourceId);
     }
     static async addEffect(character) {
         if (!Fatigue.hasItem(character, FATIGUED_EFFECT_ID)) {
