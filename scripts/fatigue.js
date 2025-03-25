@@ -166,7 +166,6 @@ class Fatigue {
         if (!Fatigue.hasItem(character, FATIGUED_EFFECT_ID)) {
             this.log(false, character.name + " creating effect");
             const effect = (await fromUuid(FATIGUED_EFFECT_ID)).toObject();
-            effect.flags.core.sourceId = FATIGUED_EFFECT_ID;
             await character.createEmbeddedDocuments('Item', [effect]);
         }
     }
